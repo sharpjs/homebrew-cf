@@ -1,4 +1,5 @@
-homebrew-mcf5307
-================
+# Homebrew Formulas for ColdFire MCF5307 Development
 
-Homebrew Formulas for ColdFire MCF5307 Development
+These are my custom formulas for the [Homebrew package manager](brew.sh)
+to support development targeting the MCF5307 microcontroller.
+
