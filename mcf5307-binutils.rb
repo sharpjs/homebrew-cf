@@ -7,11 +7,11 @@ class Mcf5307Binutils < Formula
   sha1 '1b2bc33003f4997d38fadaa276c1f0321329ec56'
 
   def install
-    system "./configure", "--program-prefix=mcf5307",
+    system "./configure", "--program-prefix=mcf5307-",
                           "--prefix=#{prefix}",
                           "--infodir=#{info}",
                           "--mandir=#{man}",
-                          "--enable-targets=m68k-elf",
+                          "--target=m68k-none-elf",
                           "--with-arch=cf",
                           "--with-cpu=5307",
                           "--enable-multilib",
@@ -19,5 +19,10 @@ class Mcf5307Binutils < Formula
     system "make"
     system "make check"
     system "make install"
+
+    # Remove files that conflict with Homebrew binutils
+    rm_rf include
+    rm_rf lib
+    rm_rf share
   end
 end
