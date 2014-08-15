@@ -1,6 +1,6 @@
 require 'formula'
 
-class CfBinutils < Formula
+class M68kCfBinutils < Formula
   homepage 'http://www.gnu.org/software/binutils/binutils.html'
   url 'http://ftpmirror.gnu.org/binutils/binutils-2.24.tar.gz'
   mirror 'http://ftp.gnu.org/gnu/binutils/binutils-2.24.tar.gz'
@@ -11,8 +11,7 @@ class CfBinutils < Formula
                           "--disable-dependency-tracking",
                           "--prefix=#{prefix}",
                           "--oldincludedir=#{prefix}/include",
-                          "--program-prefix=cf-",
-                          "--target=m68k-none-elf",
+                          "--target=m68k-cf-elf",
                           "--disable-nls",
                           "--disable-werror"
     system "make"
@@ -23,3 +22,4 @@ class CfBinutils < Formula
     rm_rf share/info
   end
 end
+

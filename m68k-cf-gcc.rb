@@ -1,6 +1,6 @@
 require 'formula'
 
-class CfGcc < Formula
+class M68kCfGcc < Formula
   homepage "http://gcc.gnu.org"
   url "http://ftpmirror.gnu.org/gcc/gcc-4.9.1/gcc-4.9.1.tar.bz2"
   mirror "ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.9.1/gcc-4.9.1.tar.bz2"
@@ -10,9 +10,7 @@ class CfGcc < Formula
   depends_on "gmp"
   depends_on "libmpc"
   depends_on "mpfr"
-  depends_on "cf-binutils"
-
-  keg_only "This formula is currently being tested."
+  depends_on "m68k-cf-binutils"
 
   if MacOS.version < :mavericks
     onoe "This formula is tested Only on OS X Mavericks."
@@ -29,37 +27,21 @@ class CfGcc < Formula
   end
 
   def install
-    # GCC can't find the cross-binutils, because it uses the cf- prefix.
-    # We need to point GCC at those tools explicitly.
-    # 
-    binutils = Formula["cf-binutils"].opt_prefix
-    ENV["AR_FOR_TARGET"]      = "#{binutils}/bin/cf-ar"
-    ENV["AS_FOR_TARGET"]      = "#{binutils}/bin/cf-as"
-    ENV["LD_FOR_TARGET"]      = "#{binutils}/bin/cf-ld"
-    ENV["NM_FOR_TARGET"]      = "#{binutils}/bin/cf-nm"
-    ENV["OBJCOPY_FOR_TARGET"] = "#{binutils}/bin/cf-objcopy"
-    ENV["OBJDUMP_FOR_TARGET"] = "#{binutils}/bin/cf-objdump"
-    ENV["RANLIB_FOR_TARGET"]  = "#{binutils}/bin/cf-ranlib"
-    ENV["READELF_FOR_TARGET"] = "#{binutils}/bin/cf-readelf"
-    ENV["STRIP_FOR_TARGET"]   = "#{binutils}/bin/cf-strip"
-
     mkdir "build" do
       args = [
           "--disable-debug",
           "--disable-dependency-tracking",
           "--prefix=#{prefix}",
           "--with-local-prefix=#{prefix}",
-          "--program-prefix=cf-",
-          "--target=m68k-none-elf",
+          "--target=m68k-cf-elf",
+          "--with-arch=cf",
           "--with-cpu=5307",
           "--enable-languages=c",
-          # "--without-headers",
-          # "--enable-version-specific-runtime-libs",
+          "--without-headers",
           "--with-gmp=#{Formula["gmp"].opt_prefix}",
           "--with-mpfr=#{Formula["mpfr"].opt_prefix}",
           "--with-mpc=#{Formula["libmpc"].opt_prefix}",
-          # "--with-cloog=#{Formula["cloog"].opt_prefix}",
-          # "--with-isl=#{Formula["isl"].opt_prefix}",
+          "--disable-lto",
           "--disable-libgomp",
           "--disable-libssp",
           "--disable-libquadmath",
@@ -72,12 +54,12 @@ class CfGcc < Formula
       ]
       system "../configure", *args
       system "make"
-      system "make install"
-      # system "make", "all-gcc", "all-target-libgcc"
-      # system "make", "install-gcc", "install-target-libgcc"
+      system "make", "install"
     end
 
     # Remove files that conflict with Homebrew gcc
     rm_rf share/info
+    rm_rf share/man/man7
   end
 end
+
