@@ -26,6 +26,17 @@ class M68kCfGcc < Formula
     cause "This formula is intended to be built with GCC."
   end
 
+  BINUTILS = "#{Formula["m68k-cf-binutils"].opt_prefix}/bin/m68k-cf-elf"
+  ENV["AR_FOR_TARGET"]      = "#{BINUTILS}-ar"
+  ENV["AS_FOR_TARGET"]      = "#{BINUTILS}-as"
+  ENV["LD_FOR_TARGET"]      = "#{BINUTILS}-ld"
+  ENV["NM_FOR_TARGET"]      = "#{BINUTILS}-nm"
+  ENV["OBJCOPY_FOR_TARGET"] = "#{BINUTILS}-objcopy"
+  ENV["OBJDUMP_FOR_TARGET"] = "#{BINUTILS}-objdump"
+  ENV["RANLIB_FOR_TARGET"]  = "#{BINUTILS}-ranlib"
+  ENV["READELF_FOR_TARGET"] = "#{BINUTILS}-readelf"
+  ENV["STRIP_FOR_TARGET"]   = "#{BINUTILS}-strip"
+
   def install
     mkdir "build" do
       args = [
@@ -38,6 +49,8 @@ class M68kCfGcc < Formula
           "--with-cpu=5307",
           "--enable-languages=c",
           "--without-headers",
+          "--with-as=#{BINUTILS}-as",
+          "--with-ld=#{BINUTILS}-ld",
           "--with-gmp=#{Formula["gmp"].opt_prefix}",
           "--with-mpfr=#{Formula["mpfr"].opt_prefix}",
           "--with-mpc=#{Formula["libmpc"].opt_prefix}",
