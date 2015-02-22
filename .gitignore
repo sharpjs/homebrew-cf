@@ -1,0 +1,13 @@
+# Reproducible binary files
+/bin
+
+# Temporary files
+temp*
+tmp*
+
+# Vim
+*.swp
+
+# Mac OS X
+.DS_Store
+
