@@ -2,9 +2,9 @@ require 'formula'
 
 class M68kCfGcc < Formula
   homepage "http://gcc.gnu.org"
-  url "http://ftpmirror.gnu.org/gcc/gcc-4.9.1/gcc-4.9.1.tar.bz2"
-  mirror "ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.9.1/gcc-4.9.1.tar.bz2"
-  sha1 "3f303f403053f0ce79530dae832811ecef91197e"
+  url "http://ftpmirror.gnu.org/gcc/gcc-4.9.2/gcc-4.9.2.tar.bz2"
+  mirror "ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.9.2/gcc-4.9.2.tar.bz2"
+  sha1 "79dbcb09f44232822460d80b033c962c0237c6d8"
 
   depends_on "gcc"
   depends_on "gmp"
@@ -12,8 +12,8 @@ class M68kCfGcc < Formula
   depends_on "mpfr"
   depends_on "m68k-cf-binutils"
 
-  if MacOS.version < :mavericks
-    onoe "This formula is tested Only on OS X Mavericks."
+  if MacOS.version < :yosemite
+    onoe "This formula is tested Only on OS X Yosemite."
   end
 
   fails_with :llvm do
