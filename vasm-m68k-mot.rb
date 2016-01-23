@@ -8,20 +8,18 @@ class VasmM68kMot < Formula
   sha256 "bb604d1ee65e28753aa8890ca99b4464eb7f74340e702bc9b2adf31a67cb860b"
 
   def install
-    inreplace "Makefile" do |s|
-      s.change_make_var! "COPTS", "-c #{ENV.cflags}"
-      s.change_make_var! "LDFLAGS", "-lm #{ENV.ldflags}"
-    end
-
     cpu    = "m68k"
     syntax = "mot"
-    vasm   = "vasm#{cpu}_#{syntax}"
 
-    system "make", "CPU=#{cpu}", "SYNTAX=#{syntax}", vasm
-    system "make", "vobjdump"
+    system "make", "CPU=#{cpu}", "SYNTAX=#{syntax}"
 
-    bin.install vasm
+    bin.install "vasm#{cpu}_#{syntax}"
     bin.install "vobjdump"
+  end
+
+  test do
+    (testpath/"test.s").write " move.l d0,d1\n"
+    system bin/"vasmm68k_mot", "-Felf", "test.s"
   end
 end
 
