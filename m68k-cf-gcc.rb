@@ -1,78 +1,100 @@
 require 'formula'
 
 class M68kCfGcc < Formula
-  homepage "http://gcc.gnu.org"
-  url "http://ftpmirror.gnu.org/gcc/gcc-4.9.2/gcc-4.9.2.tar.bz2"
-  mirror "ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.9.2/gcc-4.9.2.tar.bz2"
-  sha1 "79dbcb09f44232822460d80b033c962c0237c6d8"
+  desc     "GCC cross-compiler to M68K/ColdFire"
+  homepage "https://gcc.gnu.org"
+  url      "http://ftpmirror.gnu.org/gcc/gcc-5.3.0/gcc-5.3.0.tar.bz2"
+  mirror   "https://ftp.gnu.org/gnu/gcc/gcc-5.3.0/gcc-5.3.0.tar.bz2"
+  sha256   "b84f5592e9218b73dbae612b5253035a7b34a9a1f7688d2e1bfaaf7267d5c4db"
 
-  depends_on "gcc"
+  # Documentation:
+  # https://gcc.gnu.org/install/configure.html
+  # ./configure --help=recursive | less
+
+  # Dependencies
+  depends_on "m68k-cf-binutils"
   depends_on "gmp"
+  depends_on "isl"
   depends_on "libmpc"
   depends_on "mpfr"
-  depends_on "m68k-cf-binutils"
 
-  if MacOS.version < :yosemite
-    onoe "This formula is tested Only on OS X Yosemite."
-  end
-
-  fails_with :llvm do
-    build 2334
-    cause "This formula is intended to be built with GCC."
-  end
-
-  fails_with :clang do
-    build 503
-    cause "This formula is intended to be built with GCC."
-  end
-
-  BINUTILS = "#{Formula["m68k-cf-binutils"].opt_prefix}/bin/m68k-cf-elf"
-  ENV["AR_FOR_TARGET"]      = "#{BINUTILS}-ar"
-  ENV["AS_FOR_TARGET"]      = "#{BINUTILS}-as"
-  ENV["LD_FOR_TARGET"]      = "#{BINUTILS}-ld"
-  ENV["NM_FOR_TARGET"]      = "#{BINUTILS}-nm"
-  ENV["OBJCOPY_FOR_TARGET"] = "#{BINUTILS}-objcopy"
-  ENV["OBJDUMP_FOR_TARGET"] = "#{BINUTILS}-objdump"
-  ENV["RANLIB_FOR_TARGET"]  = "#{BINUTILS}-ranlib"
-  ENV["READELF_FOR_TARGET"] = "#{BINUTILS}-readelf"
-  ENV["STRIP_FOR_TARGET"]   = "#{BINUTILS}-strip"
+  # Needs to be built with a recent GCC
+  fails_with :clang
+  fails_with :llvm
+  fails_with :gcc_4_0
 
   def install
+    # Get dependency locations
+    gmp  = Formula["gmp"   ].opt_prefix
+    isl  = Formula["isl"   ].opt_prefix
+    mpc  = Formula["libmpc"].opt_prefix
+    mpfr = Formula["mpfr"  ].opt_prefix
+
+    binutils = "#{Formula["m68k-cf-binutils"].opt_prefix}/bin/m68k-cf-elf"
+
+    # Set target binary locations
+    ENV["AR_FOR_TARGET"     ] = "#{binutils}-ar"
+    ENV["AS_FOR_TARGET"     ] = "#{binutils}-as"
+    ENV["LD_FOR_TARGET"     ] = "#{binutils}-ld"
+    ENV["NM_FOR_TARGET"     ] = "#{binutils}-nm"
+    ENV["OBJCOPY_FOR_TARGET"] = "#{binutils}-objcopy"
+    ENV["OBJDUMP_FOR_TARGET"] = "#{binutils}-objdump"
+    ENV["RANLIB_FOR_TARGET" ] = "#{binutils}-ranlib"
+    ENV["READELF_FOR_TARGET"] = "#{binutils}-readelf"
+    ENV["STRIP_FOR_TARGET"  ] = "#{binutils}-strip"
+
+    # Set configure arguments
+    args = [
+      # Target
+      "--target=m68k-cf-elf",
+      "--with-arch=cf",
+      "--with-cpu=5307",
+
+      # C compiler only
+      "--enable-languages=c",
+
+      # Isolation
+      "--prefix=#{prefix}",
+      "--with-local-prefix=#{prefix}",
+
+      # Dependencies
+      "--with-as=#{binutils}-as",
+      "--with-ld=#{binutils}-ld",
+      "--with-gmp=#{gmp}",
+      "--with-isl=#{isl}",
+      "--with-mpfr=#{mpfr}",
+      "--with-mpc=#{mpc}",
+
+      # Do not use any target headers from a libc
+      "--without-headers",
+
+      # Do not build libraries not useful for this target
+      "--disable-libgomp",
+      "--disable-libquadmath",
+      "--disable-libsanitizer",
+      "--disable-libssp",
+      "--disable-libvtv",
+
+      # Build static libraries only
+      "--disable-shared",
+
+      # Output diagnostics in American English only
+      "--disable-nls",
+
+      # Speeds up one-time builds
+      "--disable-dependency-tracking"
+    ]
+
+    # Build
     mkdir "build" do
-      args = [
-          "--disable-debug",
-          "--disable-dependency-tracking",
-          "--prefix=#{prefix}",
-          "--with-local-prefix=#{prefix}",
-          "--target=m68k-cf-elf",
-          "--with-arch=cf",
-          "--with-cpu=5307",
-          "--enable-languages=c",
-          "--without-headers",
-          "--with-as=#{BINUTILS}-as",
-          "--with-ld=#{BINUTILS}-ld",
-          "--with-gmp=#{Formula["gmp"].opt_prefix}",
-          "--with-mpfr=#{Formula["mpfr"].opt_prefix}",
-          "--with-mpc=#{Formula["libmpc"].opt_prefix}",
-          "--disable-lto",
-          "--disable-libgomp",
-          "--disable-libssp",
-          "--disable-libquadmath",
-          "--disable-libvtv",
-          "--disable-shared",
-          "--disable-threads",
-          "--disable-tls",
-          "--disable-nls",
-          "--disable-werror"
-      ]
       system "../configure", *args
       system "make"
       system "make", "install"
     end
 
     # Remove files that conflict with Homebrew gcc
-    rm_rf share/info
-    rm_rf share/man/man7
+    rm_rf info
+    rm_rf man7
   end
 end
 
