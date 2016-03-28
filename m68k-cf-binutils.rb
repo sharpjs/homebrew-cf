@@ -2,9 +2,9 @@ require 'formula'
 
 class M68kCfBinutils < Formula
   homepage "http://www.gnu.org/software/binutils/binutils.html"
-  url "http://ftpmirror.gnu.org/binutils/binutils-2.25.tar.gz"
-  mirror "http://ftp.gnu.org/gnu/binutils/binutils-2.25.tar.gz"
-  sha1 "f10c64e92d9c72ee428df3feaf349c4ecb2493bd"
+  url      "http://ftpmirror.gnu.org/binutils/binutils-2.26.tar.bz2"
+  mirror   "http://ftp.gnu.org/gnu/binutils/binutils-2.26.tar.bz2"
+  sha256   "c2ace41809542f5237afc7e3b8f32bb92bc7bc53c6232a84463c423b0714ecd9"
 
   def install
     system "./configure", "--disable-debug",
