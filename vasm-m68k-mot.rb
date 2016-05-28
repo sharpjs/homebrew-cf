@@ -1,11 +1,11 @@
 require "formula"
 
 class VasmM68kMot < Formula
-  desc "portable and retargetable assembler"
+  desc "Portable and retargetable assembler"
   homepage "http://sun.hasenbraten.de/vasm/"
-  url "http://server.owl.de/~frank/tags/vasm1_7d.tar.gz"
-  version "1.7d"
-  sha256 "bb604d1ee65e28753aa8890ca99b4464eb7f74340e702bc9b2adf31a67cb860b"
+  url "http://server.owl.de/~frank/tags/vasm1_7e.tar.gz"
+  version "1.7e"
+  sha256 "2878c9c62bd7b33379111a66649f6de7f9267568946c097ffb7c08f0acd0df92"
 
   def install
     cpu    = "m68k"
