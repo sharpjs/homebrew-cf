@@ -3,9 +3,9 @@ require 'formula'
 class M68kCfGcc < Formula
   desc     "GCC cross-compiler to M68K/ColdFire"
   homepage "https://gcc.gnu.org"
-  url      "http://ftpmirror.gnu.org/gcc/gcc-5.3.0/gcc-5.3.0.tar.bz2"
-  mirror   "https://ftp.gnu.org/gnu/gcc/gcc-5.3.0/gcc-5.3.0.tar.bz2"
-  sha256   "b84f5592e9218b73dbae612b5253035a7b34a9a1f7688d2e1bfaaf7267d5c4db"
+  url      "http://ftpmirror.gnu.org/gcc/gcc-6.1.0/gcc-6.1.0.tar.bz2"
+  mirror   "https://ftp.gnu.org/gnu/gcc/gcc-6.1.0/gcc-6.1.0.tar.bz2"
+  sha256   "09c4c85cabebb971b1de732a0219609f93fc0af5f86f6e437fd8d7f832f1a351"
 
   # Documentation:
   # https://gcc.gnu.org/install/configure.html
@@ -19,7 +19,6 @@ class M68kCfGcc < Formula
   depends_on "mpfr"
 
   # Needs to be built with a recent GCC
-  fails_with :clang
   fails_with :llvm
   fails_with :gcc_4_0
 
