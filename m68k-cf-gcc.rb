@@ -7,9 +7,16 @@ class M68kCfGcc < Formula
   mirror   "https://ftp.gnu.org/gnu/gcc/gcc-6.1.0/gcc-6.1.0.tar.bz2"
   sha256   "09c4c85cabebb971b1de732a0219609f93fc0af5f86f6e437fd8d7f832f1a351"
 
-  # Documentation:
-  # https://gcc.gnu.org/install/configure.html
-  # ./configure --help=recursive | less
+  # 6.1.0 contains a bug that in certain circumstances causes GCC to consume
+  # all available memory very quickly & effectively crash systems.
+  # This should be safe to remove on the next stable release.
+  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=70977
+  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=70824
+  # https://github.com/gcc-mirror/gcc/commit/75e7d6607
+  patch do
+    url    "https://raw.githubusercontent.com/Homebrew/formula-patches/c963247c6b/gcc/gcc-6.1.0_infinite_memory_snacking.patch"
+    sha256 "636394ab2024ab026ead265b13b4c2a24e44c20ddfeab43a9be6e78e824de4f2"
+  end
 
   # Dependencies
   depends_on "m68k-cf-binutils"
@@ -19,8 +26,8 @@ class M68kCfGcc < Formula
   depends_on "mpfr"
 
   # Needs to be built with a recent GCC
-  fails_with :llvm
   fails_with :gcc_4_0
+  fails_with :llvm
 
   def install
     # Get dependency locations
@@ -44,6 +51,10 @@ class M68kCfGcc < Formula
 
     # Set configure arguments
     args = [
+      # Documentation:
+      # https://gcc.gnu.org/install/configure.html
+      # ./configure --help=recursive | less
+
       # Target
       "--target=m68k-cf-elf",
       "--with-arch=cf",
