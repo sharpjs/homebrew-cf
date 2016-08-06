@@ -2,21 +2,37 @@ require 'formula'
 
 class M68kCfBinutils < Formula
   homepage "http://www.gnu.org/software/binutils/binutils.html"
-  url      "http://ftpmirror.gnu.org/binutils/binutils-2.26.tar.bz2"
-  mirror   "http://ftp.gnu.org/gnu/binutils/binutils-2.26.tar.bz2"
-  sha256   "c2ace41809542f5237afc7e3b8f32bb92bc7bc53c6232a84463c423b0714ecd9"
+  url      "http://ftpmirror.gnu.org/binutils/binutils-2.27.tar.bz2"
+  mirror   "http://ftp.gnu.org/gnu/binutils/binutils-2.27.tar.bz2"
+  sha256   "369737ce51587f92466041a97ab7d2358c6d9e1b6490b3940eb09fb0a9a6ac88"
 
   def install
-    system "./configure", "--disable-debug",
-                          "--disable-dependency-tracking",
-                          "--prefix=#{prefix}",
-                          "--oldincludedir=#{prefix}/include",
-                          "--target=m68k-cf-elf",
-                          "--disable-nls",
-                          "--disable-werror"
+    args = [
+      # Target
+      "--target=m68k-cf-elf",
+
+      # Isolation
+      "--prefix=#{prefix}",
+      "--oldincludedir=#{prefix}/include",
+
+      # Output diagnostics in American English only
+      "--disable-nls",
+
+      # Still used?
+      "--disable-debug",
+
+      # Do not stop for warnings
+      "--disable-werror",
+
+      # Speeds up one-time builds
+      "--disable-dependency-tracking"
+    ]
+
+    # Build and install
+    system "./configure", *args
     system "make"
-    system "make check"
-    system "make install"
+    system "make", "check"
+    system "make", "install"
 
     # Remove files that conflict with Homebrew binutils
     rm_rf share/info
