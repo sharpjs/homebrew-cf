@@ -4,8 +4,9 @@ class VasmM68kStd < Formula
   desc     "Portable and retargetable assembler"
   homepage "http://sun.hasenbraten.de/vasm/"
   url      "http://server.owl.de/~frank/tags/vasm1_7g.tar.gz"
-  version  "1.7g_1"
   sha256   "9cfca33c348fe10419cb2ef59a7ff25c262cd6cf1d353bb51d4468f1f1535c55"
+  version  "1.7g"
+  revision 1
 
   def install
     cpu    = "m68k"
@@ -14,7 +15,6 @@ class VasmM68kStd < Formula
     system "make", "CPU=#{cpu}", "SYNTAX=#{syntax}"
 
     bin.install "vasm#{cpu}_#{syntax}"
-    #bin.install "vobjdump" # if needed, make a separate formula
   end
 
   test do
