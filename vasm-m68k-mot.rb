@@ -3,10 +3,10 @@ require "formula"
 class VasmM68kMot < Formula
   desc     "Portable and retargetable assembler"
   homepage "http://sun.hasenbraten.de/vasm/"
-  url      "http://server.owl.de/~frank/tags/vasm1_7g.tar.gz"
-  sha256   "9cfca33c348fe10419cb2ef59a7ff25c262cd6cf1d353bb51d4468f1f1535c55"
-  version  "1.7g"
-  revision 1
+  url      "http://server.owl.de/~frank/tags/vasm1_7h.tar.gz"
+  sha256   "5c012040cbfc2b16bdab0ad88dca31ec2f78b47b382c1048428ea1610063626d"
+  version  "1.7h"
+  #revision 1 # for formula updates between versions
 
   def install
     cpu    = "m68k"
