@@ -1,22 +1,9 @@
-require 'formula'
-
 class M68kCfGcc < Formula
-  desc     "GCC cross-compiler to M68K/ColdFire"
+  desc     "GCC cross-compiler to ColdFire targets"
   homepage "https://gcc.gnu.org"
-  url      "http://ftpmirror.gnu.org/gcc/gcc-6.1.0/gcc-6.1.0.tar.bz2"
-  mirror   "https://ftp.gnu.org/gnu/gcc/gcc-6.1.0/gcc-6.1.0.tar.bz2"
-  sha256   "09c4c85cabebb971b1de732a0219609f93fc0af5f86f6e437fd8d7f832f1a351"
-
-  # 6.1.0 contains a bug that in certain circumstances causes GCC to consume
-  # all available memory very quickly & effectively crash systems.
-  # This should be safe to remove on the next stable release.
-  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=70977
-  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=70824
-  # https://github.com/gcc-mirror/gcc/commit/75e7d6607
-  patch do
-    url    "https://raw.githubusercontent.com/Homebrew/formula-patches/c963247c6b/gcc/gcc-6.1.0_infinite_memory_snacking.patch"
-    sha256 "636394ab2024ab026ead265b13b4c2a24e44c20ddfeab43a9be6e78e824de4f2"
-  end
+  url      "https://ftp.gnu.org/gnu/gcc/gcc-7.1.0/gcc-7.1.0.tar.bz2"
+  mirror   "https://ftpmirror.gnu.org/gcc/gcc-7.1.0/gcc-7.1.0.tar.bz2"
+  sha256   "8a8136c235f64c6fef69cac0d73a46a1a09bb250776a050aec8f9fc880bebc17"
 
   # Dependencies
   depends_on "m68k-cf-binutils"
@@ -25,33 +12,32 @@ class M68kCfGcc < Formula
   depends_on "libmpc"
   depends_on "mpfr"
 
-  # Needs to be built with a recent GCC
-  fails_with :gcc_4_0
-  fails_with :llvm
+  # Needs to be built with GCC
+  fails_with :clang
 
   def install
     # Get dependency locations
-    gmp  = Formula["gmp"   ].opt_prefix
-    isl  = Formula["isl"   ].opt_prefix
-    mpc  = Formula["libmpc"].opt_prefix
-    mpfr = Formula["mpfr"  ].opt_prefix
+    gmp  = Formula["gmp"]    .opt_prefix
+    isl  = Formula["isl"]    .opt_prefix
+    mpc  = Formula["libmpc"] .opt_prefix
+    mpfr = Formula["mpfr"]   .opt_prefix
 
     binutils = "#{Formula["m68k-cf-binutils"].opt_prefix}/bin/m68k-cf-elf"
 
     # Set target binary locations
-    ENV["AR_FOR_TARGET"     ] = "#{binutils}-ar"
-    ENV["AS_FOR_TARGET"     ] = "#{binutils}-as"
-    ENV["LD_FOR_TARGET"     ] = "#{binutils}-ld"
-    ENV["NM_FOR_TARGET"     ] = "#{binutils}-nm"
+    ENV["AR_FOR_TARGET"]      = "#{binutils}-ar"
+    ENV["AS_FOR_TARGET"]      = "#{binutils}-as"
+    ENV["LD_FOR_TARGET"]      = "#{binutils}-ld"
+    ENV["NM_FOR_TARGET"]      = "#{binutils}-nm"
     ENV["OBJCOPY_FOR_TARGET"] = "#{binutils}-objcopy"
     ENV["OBJDUMP_FOR_TARGET"] = "#{binutils}-objdump"
-    ENV["RANLIB_FOR_TARGET" ] = "#{binutils}-ranlib"
+    ENV["RANLIB_FOR_TARGET"]  = "#{binutils}-ranlib"
     ENV["READELF_FOR_TARGET"] = "#{binutils}-readelf"
-    ENV["STRIP_FOR_TARGET"  ] = "#{binutils}-strip"
+    ENV["STRIP_FOR_TARGET"]   = "#{binutils}-strip"
 
     # Set configure arguments
     args = [
-      # Documentation:
+      # More info:
       # https://gcc.gnu.org/install/configure.html
       # ./configure --help=recursive | less
 
@@ -59,6 +45,7 @@ class M68kCfGcc < Formula
       "--target=m68k-cf-elf",
       "--with-arch=cf",
       "--with-cpu=5307",
+      "--disable-lto",
 
       # C compiler only
       "--enable-languages=c",
@@ -92,7 +79,7 @@ class M68kCfGcc < Formula
       "--disable-nls",
 
       # Speeds up one-time builds
-      "--disable-dependency-tracking"
+      "--disable-dependency-tracking",
     ]
 
     # Build
@@ -106,5 +93,9 @@ class M68kCfGcc < Formula
     rm_rf info
     rm_rf man7
   end
-end
 
+  test do
+    # Just using this formula for cpp, so no real need for much here
+    system bin/"m68k-cf-elf-gcc", "--help"
+  end
+end
