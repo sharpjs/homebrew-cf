@@ -1,10 +1,9 @@
-require 'formula'
-
 class M68kCfBinutils < Formula
-  homepage "http://www.gnu.org/software/binutils/binutils.html"
-  url      "http://ftpmirror.gnu.org/binutils/binutils-2.27.tar.bz2"
-  mirror   "http://ftp.gnu.org/gnu/binutils/binutils-2.27.tar.bz2"
-  sha256   "369737ce51587f92466041a97ab7d2358c6d9e1b6490b3940eb09fb0a9a6ac88"
+  desc     "GNU binutils for ColdFire targets"
+  homepage "https://www.gnu.org/software/binutils/binutils.html"
+  url      "https://ftp.gnu.org/gnu/binutils/binutils-2.28.tar.bz2"
+  mirror   "https://ftpmirror.gnu.org/binutils/binutils-2.28.tar.bz2"
+  sha256   "6297433ee120b11b4b0a1c8f3512d7d73501753142ab9e2daa13c5a3edd32a72"
 
   def install
     args = [
@@ -13,7 +12,7 @@ class M68kCfBinutils < Formula
 
       # Isolation
       "--prefix=#{prefix}",
-      "--oldincludedir=#{prefix}/include",
+      "--oldincludedir=#{include}",
 
       # Output diagnostics in American English only
       "--disable-nls",
@@ -25,7 +24,7 @@ class M68kCfBinutils < Formula
       "--disable-werror",
 
       # Speeds up one-time builds
-      "--disable-dependency-tracking"
+      "--disable-dependency-tracking",
     ]
 
     # Build and install
@@ -37,5 +36,9 @@ class M68kCfBinutils < Formula
     # Remove files that conflict with Homebrew binutils
     rm_rf share/info
   end
-end
 
+  test do
+    (testpath/"test.s").write "move.l %d0, %d1\n"
+    system bin/"m68k-cf-elf-as", "-o", "/dev/null", "test.s"
+  end
+end
