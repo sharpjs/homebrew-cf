@@ -1,9 +1,9 @@
 class M68kCfBinutils < Formula
   desc     "GNU binutils for ColdFire targets"
   homepage "https://www.gnu.org/software/binutils/binutils.html"
-  url      "https://ftp.gnu.org/gnu/binutils/binutils-2.28.tar.bz2"
-  mirror   "https://ftpmirror.gnu.org/binutils/binutils-2.28.tar.bz2"
-  sha256   "6297433ee120b11b4b0a1c8f3512d7d73501753142ab9e2daa13c5a3edd32a72"
+  url      "https://ftp.gnu.org/gnu/binutils/binutils-2.29.1.tar.bz2"
+  mirror   "https://ftpmirror.gnu.org/binutils/binutils-2.29.1.tar.bz2"
+  sha256   "1509dff41369fb70aed23682351b663b56db894034773e6dbf7d5d6071fc55cc"
 
   def install
     args = [
@@ -34,7 +34,7 @@ class M68kCfBinutils < Formula
     system "make", "install"
 
     # Remove files that conflict with Homebrew binutils
-    rm_rf share/info
+    rm_rf info
   end
 
   test do
