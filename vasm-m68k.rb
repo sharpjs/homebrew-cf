@@ -1,10 +1,9 @@
 class VasmM68k < Formula
   desc     "Portable and retargetable assembler (68K/CPU32/ColdFire back-end)"
   homepage "http://sun.hasenbraten.de/vasm/"
-  url      "http://sun.hasenbraten.de/vasm/release/vasm.tar.gz" # Currently 1.8c, but for how long?
-  # url    "http://server.owl.de/~frank/tags/vasm1_8c.tar.gz"   # 1.8c tarball missing
+  url      "http://server.owl.de/~frank/tags/vasm1_8c.tar.gz"
   version  "1.8c"
-  sha256   "8385666a44cdce6584e5905d6a8a22ba246d3d28595968911dc2d6d7f722f819"
+  sha256   "3e91c34077188d20928c4f1f0d2ae530830d2a8397d36b2f7e27f4ce84fe1ee5"
   head     "http://sun.hasenbraten.de/vasm/daily/vasm.tar.gz"
 
   option "without-std",   "Disable MIT (GNU as-style) syntax"
