@@ -1,9 +1,9 @@
 class VasmM68k < Formula
   desc     "Portable and retargetable assembler (68K/CPU32/ColdFire back-end)"
   homepage "http://sun.hasenbraten.de/vasm/"
-  url      "http://server.owl.de/~frank/tags/vasm1_8c.tar.gz"
-  version  "1.8c"
-  sha256   "3e91c34077188d20928c4f1f0d2ae530830d2a8397d36b2f7e27f4ce84fe1ee5"
+  url      "http://server.owl.de/~frank/tags/vasm1_8d.tar.gz"
+  version  "1.8d"
+  sha256   "ad68732600665e822dca60ea1f6b26854beda76e8f9c604358cf93b5cbb265be"
   head     "http://sun.hasenbraten.de/vasm/daily/vasm.tar.gz"
 
   option "without-std",   "Disable MIT (GNU as-style) syntax"
