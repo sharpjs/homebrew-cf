@@ -1,9 +1,9 @@
 class M68kCfBinutils < Formula
   desc     "GNU binutils for ColdFire targets"
   homepage "https://www.gnu.org/software/binutils/binutils.html"
-  url      "https://ftp.gnu.org/gnu/binutils/binutils-2.31.1.tar.lz"
-  mirror   "https://ftpmirror.gnu.org/binutils/binutils-2.31.1.tar.lz"
-  sha256   "87eaf3c79514bc286ddc6c2fc7388ce2adaf5dd850894a7afc5791a84e661331"
+  url      "https://ftp.gnu.org/gnu/binutils/binutils-2.32.tar.lz"
+  mirror   "https://ftpmirror.gnu.org/binutils/binutils-2.32.tar.lz"
+  sha256   "1136b65c80859a715f32a6aaebc8c70aa427e5a0d53b49476c8cbca31c5c9241"
 
   def install
     args = [
